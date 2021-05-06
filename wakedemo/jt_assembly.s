@@ -1,57 +1,60 @@
-
+	
 
 	.arch msp430g2553
 	.p2align 1,0
-	.text
 
+
+
+	.data			;
+state:
+	.word 1
 jt:
-	.word option0 		; jt[0]
-	.word option1
-	.word option2
+	.word default		;jt[0]
+	.word option1		;jt[1]
+	.word option2		;jt[2]
+	.word option3		;jt[3]
 
-	.global buzz_assembly
+	.global buzzer_assembly
 
-buzz_assembly:
+buzzer_assembly:
 
+	;;check for state
+	cmp #4, &state		;s-4 does not borrow is s>3
+	jnz default		;jump if s > 3
 
-	sub #2, r1 		;allocate memory for a short which is
-	mov #0, 0(r1)		;state-3 does not borrow if state>2
-
-	cmp #3, r12
-	jc end			;jmp if state is > 2
-
-
-	cmp #0, r12		;borrow if state <0
-	jl end			;jmp if state<0
-
-	add r12, r12 		;r12=2*stated
-	mov jt(r12), r0		;jmp jt [state]
-
-
-option0:
-	mov #400, 0(r1)
-	mov 0(r1), r12
-	call #play_buzzer	
-	jmp end
+	mov &state, r12
+	add r12, r12		;r12 = 2*s
+	mov jt(r12), r0		;jmp jt[s]
 
 option1:
-	mov #500, 0(r1)
-	mov 0(r1), r12
-	call #play_buzzer
-	jmp end
+	
+	mov #400, r12		;buzzer_set_period(500)
+	
+	call #buzzer_set_period
+	add #1, &state
+
 
 option2:
-	mov #600, 0(r1)
-	mov 0(r1), r12
-	call #play_buzzer
-	jmp end
+	mov #600, r12		;buzzer_set_period(500)
+	
+	call #buzzer_set_period
+	add #1, &state
+ 
 
-end:
-	add #2, r1
-	pop r0
-
+option3:
+	mov #500, r12		;buzzer_set_period(500)
+	call #buzzer_set_period
+	mov #0, &state
 	
 
+default:
+	mov #0, &state
+
+end:
+	pop r0			;return
+	
+
+	
 
 	
 

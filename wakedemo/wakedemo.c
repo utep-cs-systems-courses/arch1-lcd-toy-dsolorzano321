@@ -6,7 +6,7 @@
 #include "shape.h"
 #include "abCircle.h"
 #include "buzzer.h"
-//#include "stateMachines.h"
+#include "stateMachines.h"
 #include <p2switches.h>
 
 #define LED_GREEN BIT6             // P1.6
@@ -24,6 +24,10 @@ u_char nextL_R = 10;
 
 signed char Speed = 2; 
 
+int sleep = 1;
+static int t = 0;
+
+
 void wdt_c_handler()
 {
 
@@ -31,6 +35,15 @@ void wdt_c_handler()
   static int dsecCount = 0;
   secCount ++;
   dsecCount ++;
+  t++;
+  
+  if(t>=1800){
+    sleep = 0;
+    fillRectangle(0,0,screenWidth, screenHeight, COLOR_BLACK);
+    t=0;
+
+  }
+
   
   if (secCount == 250) {/* once/sec */
     
@@ -68,35 +81,60 @@ void StartGame()
       if(str[0]=='0'){
 	//drawString5x7(50,50,"H",COLOR_GREEN, COLOR_BLUE);
 	nextU_D += Speed;
-	//buzz_advance();
-	buzzer_set_period(500);
+	buzzer_assembly();
+	//buzzer_set_period(500);
+	//led_assembly();
+	sleep = 1;
+	t=0;
 
       }
       if(str[1]=='1'){
+	buzzer_set_period(500);
 	nextU_D -= Speed;
+	sleep = 1;
+	t=0;
+	
       }
       if(str[2]=='2'){
 	nextL_R -=Speed;
+	sleep = 1;
+	t=0;
+
+	
       }
       if(str[3]=='3'){
 	nextL_R +=Speed;
+	sleep=1;
+	t=0;
       }
     }
     str[4] = 0;
-    drawString5x7(20,20,str,COLOR_WHITE, COLOR_BLACK);
 
-    if (redrawScreen) {
+    if(sleep == 0){
+      P1OUT &= ~LED_GREEN;
+      or_sr(0x10);
+
+    }
+    
+   
+
+    if (redrawScreen && sleep==1) {
       redrawScreen = 0;
 
       fillRectangle(L_R,U_D,10,10, COLOR_BLACK);
       fillRectangle(nextL_R,nextU_D,10,10, COLOR_RED);
+      
+      //drawString5x7(20,20,str,COLOR_WHITE, COLOR_BLACK);
+      
       L_R = nextL_R;
       U_D = nextU_D;
     }
-    P1OUT &= ~LED_GREEN;/* green off */
-    or_sr(0x10);/**< CPU OFF */
-    P1OUT |= LED_GREEN;/* green on */
 
+    if(sleep == 1){
+      P1OUT &= ~LED_GREEN;/* green off */
+      or_sr(0x10);/**< CPU OFF */
+      P1OUT |= LED_GREEN;/* green on */
+    }
   }
 }
 

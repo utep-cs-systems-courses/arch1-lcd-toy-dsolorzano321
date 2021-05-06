@@ -20,6 +20,33 @@ void play_buzzer(short note){
 }
 
 /*
+void buzzer_assembly(){
+  switch(state){
+  case 0:
+    buzzer_set_period(500);
+    state++;
+    break;
+  case 1:
+    buzzer_set_period(400);
+    state++;
+    break;
+  case 2:
+    buzzer_set_period(600);
+    state++;
+    break;
+  case 3:
+    buzzer_set_period(400);
+    state++;
+    break;
+  default:
+    state =0;
+  }
+
+
+}
+*/
+
+/*
 void buzz_advance(){
   switch(state){
   case 0:
@@ -42,22 +69,12 @@ void buzz_advance(){
     state++;
 
   }
-*/
 
 
-//}
 
-static char secState = 0;
-static int secPeriod = 0;
-void secBttn(){
-  switch(secState){
-  case 0:
-    break;
-  }
 }
 
-
-
+*/
 /*
 static char song_state = 0;
 static int period = 0;

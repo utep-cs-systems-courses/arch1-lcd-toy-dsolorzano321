@@ -84,7 +84,7 @@ void StartGame()
 	//buzzer_assembly(0);
 	//buzzer_set_period(500);
 	//led_assembly();
-	buzz_advance(0);
+	buzz_advance();
 	sleep = 1;
 	t=0;
 

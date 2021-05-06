@@ -77,7 +77,7 @@ void buzz_advance(){
 
 }
 
-*/
+
 /*
 static char song_state = 0;
 static int period = 0;

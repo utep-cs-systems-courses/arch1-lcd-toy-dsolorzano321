@@ -19,6 +19,9 @@ void play_buzzer(short note){
   //green_on = 1;
 }
 
+
+
+
 /*
 void buzzer_assembly(){
   switch(state){
@@ -46,23 +49,23 @@ void buzzer_assembly(){
 }
 */
 
-/*
+
 void buzz_advance(){
   switch(state){
   case 0:
-    buzz_assembly(0);
+    buzzer_assembly(0);
     state++;
     break;
   case 1:
-    buzz_assembly(1);
+    buzzer_assembly(1);
     state++;
     break;
   case 2:
-    buzz_assembly(2);
+    buzzer_assembly(2);
     state++;
     break;
   case 3:
-    buzz_assembly(3);
+    buzzer_assembly(3);
     state++;
     break;
   default:

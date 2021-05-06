@@ -20,7 +20,7 @@ buzzer_assembly:
 
 	;;check for state
 	cmp #4, &state		;s-4 does not borrow is s>3
-	jnz default		;jump if s > 3
+	jhs default		;jump if s > 3
 
 	mov &state, r12
 	add r12, r12		;r12 = 2*s
@@ -28,27 +28,30 @@ buzzer_assembly:
 
 option1:
 	
-	mov #400, r12		;buzzer_set_period(500)
-	
+	mov #400, 0(r1)		;buzzer_set_period(500)
+	mov 0(r1), r12
 	call #buzzer_set_period
-	add #1, &state
+	
+	jmp end
 
 
 option2:
-	mov #600, r12		;buzzer_set_period(500)
-	
+	mov #600, 0(r1)
+	mov 0(r1), r12
 	call #buzzer_set_period
-	add #1, &state
+	
+	jmp end
  
 
 option3:
-	mov #500, r12		;buzzer_set_period(500)
+	mov #500, 0(r1)
+	mov 0(r1), r12
 	call #buzzer_set_period
 	mov #0, &state
 	
 
 default:
-	mov #0, &state
+	add #1, &state
 
 end:
 	pop r0			;return

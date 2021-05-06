@@ -81,9 +81,10 @@ void StartGame()
       if(str[0]=='0'){
 	//drawString5x7(50,50,"H",COLOR_GREEN, COLOR_BLUE);
 	nextU_D += Speed;
-	buzzer_assembly();
+	//buzzer_assembly(0);
 	//buzzer_set_period(500);
 	//led_assembly();
+	buzz_advance(0);
 	sleep = 1;
 	t=0;
 

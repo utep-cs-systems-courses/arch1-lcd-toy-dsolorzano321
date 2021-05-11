@@ -17,6 +17,40 @@ void drawPixel(u_char col, u_char row, u_int colorBGR)
   lcd_writeColor(colorBGR);
 }
 
+
+void drawTree(u_int color){
+
+  u_char offset_r = 70, offset_c = 58;
+  u_char center = 10;
+
+  for(int r = 0; r<=17; r++){
+    for(int c = 0; c <= r; c++){
+      drawPixel(offset_c - c, offset_r+r-9, color);
+      drawPixel(offset_c + c, offset_r+r-9, color);
+    }
+  }
+  for(int r = 0; r <= 17; r++){
+    for(int c = 0; c <= r; c++){
+      drawPixel(offset_c-c, offset_r-r+59, color);
+      drawPixel(offset_c+c, offset_r-r+59, color);    
+
+    }
+
+  }
+  for(int r = 0; r<= 30; r++){
+    for(int c = 0; c <= 35; c++){
+      drawPixel(c+40, r+80, COLOR_BROWN);
+    }
+  }
+
+
+  
+
+}
+
+
+
+
 /** Fill rectangle
  *
  *  \param colMin Column start
@@ -54,15 +88,36 @@ void clearScreen(u_int colorBGR)
 void drawChar5x7(u_char rcol, u_char rrow, char c, 
      u_int fgColorBGR, u_int bgColorBGR) 
 {
-  u_char col = 0;
-  u_char row = 0;
-  u_char bit = 0x01;
-  u_char oc = c - 0x20;
+  u_int col = 0;
+  u_int row = 0;
+  u_int bit = 0x0001;
+  u_int oc = c - 0x20;
 
   lcd_setArea(rcol, rrow, rcol + 4, rrow + 7); /* relative to requested col/row */
   while (row < 8) {
     while (col < 5) {
       u_int colorBGR = (font_5x7[oc][col] & bit) ? fgColorBGR : bgColorBGR;
+      lcd_writeColor(colorBGR);
+      col++;
+    }
+    col = 0;
+    bit <<= 1;
+    row++;
+  }
+}
+
+void drawChar11x16(u_char rcol, u_char rrow, char c, 
+     u_int fgColorBGR, u_int bgColorBGR) 
+{
+  u_int col = 0;
+  u_int row = 0;
+  u_int bit = 0x01; //short
+  u_int oc = c - 0x20;
+
+  lcd_setArea(rcol, rrow, rcol + 10, rrow + 15); /* relative to requested col/row */
+  while (row < 16) {
+    while (col < 11) {
+      u_int colorBGR = (font_11x16[oc][col] & bit) ? fgColorBGR : bgColorBGR;
       lcd_writeColor(colorBGR);
       col++;
     }
@@ -93,6 +148,18 @@ void drawString5x7(u_char col, u_char row, char *string,
     cols += 6;
   }
 }
+void drawString11x16(u_char col, u_char row, char *string,
+		u_int fgColorBGR, u_int bgColorBGR)
+{
+  u_char cols = col;
+  while (*string) {
+    drawChar11x16(cols, row, *string++, fgColorBGR, bgColorBGR);
+    cols += 12;
+  }
+}
+
+
+
 
 
 /** Draw rectangle outline
